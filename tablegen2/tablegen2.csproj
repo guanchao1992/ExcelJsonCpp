@@ -158,6 +158,7 @@
     <Compile Include="CommandHelper.cs" />
     <Compile Include="common\AppData.cs" />
     <Compile Include="common\BinaryExtension.cs" />
+    <Compile Include="common\CreateTableCpp.cs" />
     <Compile Include="common\FrameworkExtension.cs" />
     <Compile Include="common\GzipHelper.cs" />
     <Compile Include="common\JsonConfig.cs" />

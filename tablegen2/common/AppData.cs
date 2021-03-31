@@ -1,4 +1,5 @@
-﻿using tablegen2.logic;
+﻿using tablegen2.common;
+using tablegen2.logic;
 
 namespace tablegen2
 {
@@ -14,11 +15,9 @@ namespace tablegen2
         public static void loadConfig()
         {
             Config = JsonConfig.readFromFile<TableGenConfig>("config.json") ?? new TableGenConfig();
-            //修正值
-            if (string.IsNullOrEmpty(Config.SheetNameForField))
-                Config.SheetNameForField = "def";
-            if (string.IsNullOrEmpty(Config.SheetNameForData))
-                Config.SheetNameForData = "data";
+
+            //var hp = new CreateTableCpp();
+            //var a = CreateTableCpp.CppString1;
         }
         public static void saveConfig()
         {

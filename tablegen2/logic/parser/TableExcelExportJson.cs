@@ -37,6 +37,23 @@ namespace tablegen2.logic
                                 obj = n;
                             }
                             break;
+                        case "float":
+                            {
+                                float n = 0;
+                                float.TryParse(val, out n);
+                                obj = n;
+                            }
+                            break;
+                        case "bool":
+                            {
+                                bool n = false;
+                                bool.TryParse(val, out n);
+                                obj = n;
+                            }
+                            break;
+                        case "json":
+                            obj = val;
+                            break;
                     }
                     r[hdr.FieldName] = obj;
                 }

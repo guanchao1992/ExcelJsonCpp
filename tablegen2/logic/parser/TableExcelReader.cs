@@ -29,45 +29,65 @@ namespace tablegen2.logic
 
             return new TableExcelData(headers, rows);
         }
-
-        private static void _readDataFromWorkbook(IWorkbook wb, List<TableExcelHeader> headers, List<TableExcelRow> rows)
+        
+        private static void _readDataFromWorkbookSheet(IWorkbook wb, ISheet sheet, List<TableExcelHeader> headers, List<TableExcelRow> rows)
         {
-            var defSheetName = AppData.Config.SheetNameForField;
-            var dataSheetName = AppData.Config.SheetNameForData;
-
-            var sheet1 = wb.GetSheet(defSheetName);
-            if (sheet1 == null)
-                throw new Exception(string.Format("'{0}'工作簿不存在", defSheetName));
-
-            var sheet2 = wb.GetSheet(dataSheetName);
-            if (sheet2 == null)
-                throw new Exception(string.Format("'{0}'工作簿不存在", dataSheetName));
-
             //加载字段
-            _readHeadersFromDefSheet(sheet1, headers);
+            var rd0 = sheet.GetRow(0);
+            var rd1 = sheet.GetRow(1);
+            var rd2 = sheet.GetRow(2);
 
-            var h1 = headers.Find(a => a.FieldName == "Id");
-            if (h1 == null)
-                throw new Exception(string.Format("'{0}'工作簿中不存在Id字段！", defSheetName));
+            for (int i = 0; i < rd1.LastCellNum; i++)
+            {
+                var cell0 = rd0.GetCell(i);
+                var cell1 = rd1.GetCell(i);
+                var cell2 = rd2.GetCell(i);
 
-            var h2 = headers.Find(a => a.FieldName == "KeyName");
-            if (h2 == null)
-                throw new Exception(string.Format("'{0}'工作簿中不存在KeyName字段！", defSheetName));
+                if (cell1 != null && cell2 != null)
+                {
+                    var strcell2 = rd2.GetCell(i).ToString();
+                    var strcell1 = rd1.GetCell(i).ToString();
+                    var strcell0 = cell0 != null ? rd0.GetCell(i).ToString() : "";
+                    headers.Add(new TableExcelHeader()
+                    {
+                        FieldName = strcell2,
+                        FieldType = strcell1,
+                        FieldDesc = strcell0,
+                    });
+                }
+                else
+                {
+                    if (cell1 == null)
+                    {
+                        throw new Exception(string.Format(
+                            "'{0}'工作簿中第{1}列数据未配置数据类型！", AppData.Config.SheetNameForField, i + 1));
+                    }
+                    if (cell2 == null)
+                    {
+                        throw new Exception(string.Format(
+                            "'{0}'工作簿中第{1}列数据未配置数据名！", AppData.Config.SheetNameForField, i + 1));
+                    }
+                }
+            }
 
-            //加载数据
-            var headers2 = _readHeadersFromDataSheet(sheet2);
             var headerIndexes = new int[headers.Count];
-            _checkFieldsSame(headers, headers2, headerIndexes);
-
-            foreach (var ds in _readDataFromDataSheet(sheet2, headers2.Count))
+            foreach (var ds in _readDataFromDataSheet(sheet, headers.Count))
             {
                 var rowData = new List<string>();
                 for (int i = 0; i < headers.Count; i++)
                 {
-                    var idx = headerIndexes[i];
-                    rowData.Add(ds[idx]);
+                    rowData.Add(ds[i]);
                 }
                 rows.Add(new TableExcelRow() { StrList = rowData });
+            }
+        }
+
+        private static void _readDataFromWorkbook(IWorkbook wb, List<TableExcelHeader> headers, List<TableExcelRow> rows)
+        {
+            for (int i = 0; i < wb.NumberOfSheets; i++)
+            {
+                ISheet it = wb.GetSheetAt(i);
+                _readDataFromWorkbookSheet(wb, it, headers, rows);
             }
         }
 
@@ -171,7 +191,7 @@ namespace tablegen2.logic
 
         private static IEnumerable<List<string>> _readDataFromDataSheet(ISheet sheet, int columns)
         {
-            for (int i = 1; i <= sheet.LastRowNum; i++)
+            for (int i = 3; i <= sheet.LastRowNum; i++)
             {
                 var rd = sheet.GetRow(i);
                 if (rd == null)

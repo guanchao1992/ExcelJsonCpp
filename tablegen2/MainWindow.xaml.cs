@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using tablegen2.common;
 using tablegen2.layouts;
 using tablegen2.logic;
 
@@ -248,6 +250,13 @@ namespace tablegen2
                         }
                         break;
                 }
+                //生成.h文件
+                {
+                    var exportPath = Path.Combine(exportDir, string.Format("{0}.h", Path.GetFileNameWithoutExtension(filePath)));
+                    var outCppData = CreateTableCpp.toFileData(Path.GetFileNameWithoutExtension(filePath), data.Headers);
+                    File.WriteAllBytes(exportPath, Encoding.UTF8.GetBytes(outCppData));
+                }
+
                 Log.Msg("生成成功");
             }
             catch (System.Exception ex)
