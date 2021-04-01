@@ -31,15 +31,11 @@
             </Grid>
             <StackPanel Grid.Row="3" Orientation="Horizontal">
                 <TextBlock Width="100" TextAlignment="Right" Text="输出格式：" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Foreground="Gray"/>
-                <ComboBox x:Name="cbExportFormat" Width="150" Height="22" FontSize="12" MaxDropDownHeight="200" Margin="0,0,0,0" BorderBrush="{StaticResource CommonBorder}" VerticalContentAlignment="Center">
+                <ComboBox x:Name="cbExportFormat" Width="150" Height="22" FontSize="12" MaxDropDownHeight="200" Margin="0,0,0,0" BorderBrush="{StaticResource CommonBorder}" VerticalContentAlignment="Center" SelectionChanged="CbExportFormat_SelectionChanged">
                     <ComboBoxItem Height="0" Content="请选择导出格式" Tag="Unknown" Margin="0" IsSelected="True" Visibility="Hidden"/>
-                    <ComboBoxItem Height="20" Content="加密格式" Tag="Dat" Margin="0,1,0,1" Selected="exportFormat_Selected"/>
                     <ComboBoxItem Height="20" Content="Json格式" Tag="Json" Margin="0,1,0,1" Selected="exportFormat_Selected"/>
-                    <ComboBoxItem Height="20" Content="Xml格式" Tag="Xml" Margin="0,1,0,1" Selected="exportFormat_Selected"/>
-                    <ComboBoxItem Height="20" Content="Lua格式" Tag="Lua" Margin="0,1,0,1" Selected="exportFormat_Selected"/>
                 </ComboBox>
             </StackPanel>
-            <el:ButtonDark Grid.Row="3" Width="80" Height="20" Content="更多设置..." VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,18,0" Click="btnMoreSetting_Clicked"/>
         </Grid>
     </Border>
 </UserControl>

@@ -58,15 +58,15 @@ namespace tablegen2.layouts
             {
                 new TableExcelHeader()
                 {
-                    FieldName = "Id",
+                    FieldName = "id",
                     FieldType = "int",
                     FieldDesc = "唯一Id索引",
                 },
                 new TableExcelHeader()
                 {
-                    FieldName = "KeyName",
+                    FieldName = "name",
                     FieldType = "string",
-                    FieldDesc = "唯一Key索引",
+                    FieldDesc = "名字",
                 },
             });
 
@@ -74,8 +74,8 @@ namespace tablegen2.layouts
             pw.ResizeMode = ResizeMode.CanResize;
             pw.Owner = Window.GetWindow(this);
             pw.Title = string.Format("新建Excel表格");
-            pw.MinWidth = 600;
-            pw.MinHeight = 400;
+            pw.MinWidth = 680;
+            pw.MinHeight = 480;
             if (pw.ShowDialog() == true)
             {
                 try

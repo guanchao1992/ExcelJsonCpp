@@ -139,22 +139,17 @@ namespace tablegen2.layouts
             miOpen.Click += (_s, _e) => System.Diagnostics.Process.Start(item.FullPath);
             menu.Items.Add(miOpen);
 
-            var miEdit = new MenuItem();
-            miEdit.Header = "编辑Excel(_E)";
-            miEdit.Click += (_s, _e) => AppData.MainWindow.editForExcel(item.FullPath);
-            menu.Items.Add(miEdit);
-            menu.Items.Add(new Separator());
-
             //导出菜单选项
             {
                 string menuText = string.Empty;
                 switch (AppData.Config.ExportFormat)
                 {
-                    case TableExportFormat.Dat:
-                        menuText = "导出Dat数据";
-                        break;
                     case TableExportFormat.Json:
                         menuText = "导出Json数据";
+                        break;
+                        /*
+                    case TableExportFormat.Dat:
+                        menuText = "导出Dat数据";
                         break;
                     case TableExportFormat.Xml:
                         menuText = "导出Xml数据";
@@ -162,22 +157,16 @@ namespace tablegen2.layouts
                     case TableExportFormat.Lua:
                         menuText = "导出Lua数据";
                         break;
+                        */
                 }
                 if (!string.IsNullOrEmpty(menuText))
                 {
                     var miExport = new MenuItem();
                     miExport.Header = menuText;
-                    miExport.Click += (_s, _e) => AppData.MainWindow.genSingleFile(item.FullPath, AppData.Config.ExcelDir, AppData.Config.ExportFormat);
+                    miExport.Click += (_s, _e) => AppData.MainWindow.genSingleFile(item.FullPath, AppData.Config.ExportDir, AppData.Config.ExportFormat);
                     menu.Items.Add(miExport);
                 }
             }
-
-            //美化Excel格式
-            var miRectify = new MenuItem();
-            miRectify.Header = "美化Excel表";
-            miRectify.Click += (_s, _e) => AppData.MainWindow.rectifyFileFormat(item.FullPath);
-            menu.Items.Add(miRectify);
-            menu.Items.Add(new Separator());
 
             var miExplorer = new MenuItem();
             miExplorer.Header = "打开所在文件夹";
@@ -208,12 +197,6 @@ namespace tablegen2.layouts
                     CreateExcelEvent.Invoke();
             };
             menu.Items.Add(miCreate);
-            menu.Items.Add(new Separator());
-
-            var miExcelFormat = new MenuItem();
-            miExcelFormat.Header = "一键美化Excel表";
-            miExcelFormat.Click += (_s, _e) => AppData.MainWindow.rectifyAllFileFormat(AllExcels.ToList());
-            menu.Items.Add(miExcelFormat);
             menu.Items.Add(new Separator());
 
             var miExplorer = new MenuItem();

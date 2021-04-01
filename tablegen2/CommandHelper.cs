@@ -212,11 +212,12 @@ namespace tablegen2
             var fmt = TableExportFormat.Unknown;
             switch (ExportType.ToLower())
             {
-                case "xml":
-                    fmt = TableExportFormat.Xml;
-                    break;
                 case "json":
                     fmt = TableExportFormat.Json;
+                    break;
+                    /*
+                case "xml":
+                    fmt = TableExportFormat.Xml;
                     break;
                 case "lua":
                     fmt = TableExportFormat.Lua;
@@ -224,6 +225,7 @@ namespace tablegen2
                 case "dat":
                     fmt = TableExportFormat.Dat;
                     break;
+                    */
             }
             if (fmt == TableExportFormat.Unknown)
             {
@@ -250,16 +252,17 @@ namespace tablegen2
             var data = TableExcelReader.loadFromExcel(excelPath);
             switch (fmt)
             {
-                case TableExportFormat.Dat:
-                    {
-                        var exportPath = Path.Combine(outputDir, string.Format("{0}.exdat", Path.GetFileNameWithoutExtension(excelPath)));
-                        TableExcelExportDat.exportExcelFile(data, exportPath);
-                    }
-                    break;
                 case TableExportFormat.Json:
                     {
                         var exportPath = Path.Combine(outputDir, string.Format("{0}.json", Path.GetFileNameWithoutExtension(excelPath)));
                         TableExcelExportJson.exportExcelFile(data, exportPath);
+                    }
+                    break;
+                    /*
+                case TableExportFormat.Dat:
+                    {
+                        var exportPath = Path.Combine(outputDir, string.Format("{0}.exdat", Path.GetFileNameWithoutExtension(excelPath)));
+                        TableExcelExportDat.exportExcelFile(data, exportPath);
                     }
                     break;
                 case TableExportFormat.Xml:
@@ -274,6 +277,7 @@ namespace tablegen2
                         TableExcelExportLua.exportExcelFile(data, exportPath);
                     }
                     break;
+                    */
             }
         }
     }

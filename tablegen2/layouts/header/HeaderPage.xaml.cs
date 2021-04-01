@@ -156,6 +156,8 @@ namespace tablegen2.layouts
             panel.FieldType = item.FieldType;
             panel.FieldDesc = item.FieldDesc;
 
+            var panel2 = new HeaderListView();
+
             var pw = new PopupWindow(panel);
             pw.Owner = Window.GetWindow(this);
             pw.Title = string.Format("复制添加字段");

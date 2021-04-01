@@ -97,7 +97,7 @@ namespace tablegen2.layouts
         public void moveUp(HeaderListItem item)
         {
             int idx = items_.IndexOf(item);
-            if (idx < 3)
+            if (idx < 2)
                 return;
 
             var tmpItem = items_[idx - 1];
@@ -111,7 +111,7 @@ namespace tablegen2.layouts
         public void moveDown(HeaderListItem item)
         {
             int idx = items_.IndexOf(item);
-            if (idx < 2 || idx == items_.Count - 1)
+            if (idx < 1 || idx == items_.Count - 1)
                 return;
 
             var tmpItem = items_[idx + 1];

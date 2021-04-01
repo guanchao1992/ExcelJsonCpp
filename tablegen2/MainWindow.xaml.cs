@@ -24,7 +24,6 @@ namespace tablegen2
             
             setting.ExcelDirChanged += () => tree.refreshExcelPath(AppData.Config.ExcelDir);
             setting.ExportFormatChanged += () => refreshButtonGenAll();
-            setting.MoreSettingEvent += () => _flipMoreSettingPanel();
             tree.OpenExcelRequest += () => setting.browseExcelDirectory();
 
             if (AppData.Config != null)
@@ -106,90 +105,6 @@ namespace tablegen2
             }
         }
 
-        public void editForExcel(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                Log.Err("源文件不存在！ {0}", filePath);
-                return;
-            }
-
-            try
-            {
-                TableExcelData data = TableExcelReader.loadFromExcel(filePath);
-                openExcelView(data, filePath);
-            }
-            catch (System.Exception ex)
-            {
-                Log.Err(ex.Message);
-            }
-        }
-
-        public void openExcelView(TableExcelData data, string filePath)
-        {
-            var panel = new FrameExcelView();
-            panel.refreshUIByTableExcelData(data);
-            panel.setFilePath(filePath);
-
-            var pw = new PopupWindow(panel);
-            pw.ResizeMode = ResizeMode.CanResize;
-            pw.Owner = Window.GetWindow(this);
-            pw.Title = string.Format("查看配置表 -- {0}", filePath);
-            pw.MinWidth = 600;
-            pw.MinHeight = 400;
-            if (pw.ShowDialog() == true)
-            {
-            }
-        }
-
-        public void rectifyFileFormat(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                Log.Err("源文件不存在！ {0}", filePath);
-                return;
-            }
-
-            Log.Msg("=================================================");
-
-            try
-            {
-                Log.Msg("正在优化 {0}", filePath);
-                TableExcelData data = TableExcelReader.loadFromExcel(filePath);
-                TableExcelWriter.genExcel(data, filePath);
-                Log.Msg("优化完毕！");
-            }
-            catch (System.Exception ex)
-            {
-                Log.Err(ex.Message);
-            }
-        }
-
-        public void rectifyAllFileFormat(List<string> files)
-        {
-            if (files.Count == 0)
-            {
-                Log.Wrn("没有要优化的文件");
-                return;
-            }
-
-            Log.Msg("=================================================");
-            foreach (var filePath in files)
-            {
-                try
-                {
-                    Log.Msg("正在优化 {0}", filePath);
-                    TableExcelData data = TableExcelReader.loadFromExcel(filePath);
-                    TableExcelWriter.genExcel(data, filePath);
-                }
-                catch (System.Exception ex)
-                {
-                    Log.Err(ex.Message);
-                }
-            }
-            Log.Msg("优化完毕！");
-        }
-
         public void genSingleFile(string filePath, string exportDir, TableExportFormat fmt)
         {
             if (!File.Exists(filePath))
@@ -225,16 +140,17 @@ namespace tablegen2
                     Log.Wrn(errmsg);
                 switch (fmt)
                 {
-                    case TableExportFormat.Dat:
-                        {
-                            var exportPath = Path.Combine(exportDir, string.Format("{0}.exdat", Path.GetFileNameWithoutExtension(filePath)));
-                            TableExcelExportDat.exportExcelFile(data, exportPath);
-                        }
-                        break;
                     case TableExportFormat.Json:
                         {
                             var exportPath = Path.Combine(exportDir, string.Format("{0}.json", Path.GetFileNameWithoutExtension(filePath)));
                             TableExcelExportJson.exportExcelFile(data, exportPath);
+                        }
+                        break;
+                        /*
+                    case TableExportFormat.Dat:
+                        {
+                            var exportPath = Path.Combine(exportDir, string.Format("{0}.exdat", Path.GetFileNameWithoutExtension(filePath)));
+                            TableExcelExportDat.exportExcelFile(data, exportPath);
                         }
                         break;
                     case TableExportFormat.Xml:
@@ -249,6 +165,7 @@ namespace tablegen2
                             TableExcelExportLua.exportExcelFile(data, exportPath);
                         }
                         break;
+                        */
                 }
                 //生成.h文件
                 {
@@ -271,15 +188,6 @@ namespace tablegen2
             var pw = new PopupWindow(hp);
             pw.Owner = Window.GetWindow(this);
             pw.Title = "使用说明";
-            pw.ShowDialog();
-        }
-
-        private void _flipMoreSettingPanel()
-        {
-            var fsm = new FrameSettingMore();
-            var pw = new PopupWindow(fsm);
-            pw.Owner = Window.GetWindow(this);
-            pw.Title = "更多设置";
             pw.ShowDialog();
         }
     }

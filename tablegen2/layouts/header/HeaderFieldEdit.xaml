@@ -5,9 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:el="clr-namespace:tablegen2.layouts"
              mc:Ignorable="d" 
-             Height="300" Width="400"
+             Height="315.7" Width="515.359"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <Grid>
+    <Grid Margin="0,10,10.667,0" RenderTransformOrigin="0.5,0.5">
+        <Grid.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform/>
+                <SkewTransform/>
+                <RotateTransform Angle="0"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </Grid.RenderTransform>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
@@ -15,21 +23,22 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="6.185"/>
+            <ColumnDefinition Width="73.815"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="字段名称：" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="字段类型：" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="字段描述：" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <TextBox Grid.Row="0" Grid.Column="1" x:Name="txtFieldName" Text="{Binding FieldName}" IsReadOnly="{Binding IsFieldNameReadonly}" Height="20" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="10,0,20,0"/>
-        <ComboBox Grid.Row="1" Grid.Column="1" x:Name="cbFieldType" FontWeight="Bold" Height="22" FontSize="12" MaxDropDownHeight="200" Margin="10,0,20,0" BorderBrush="{StaticResource CommonBorder}" VerticalContentAlignment="Center">
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="字段名称：" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3.815,17,10,17"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="字段类型：" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3.815,17,10,17"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="字段描述：" Foreground="Gray" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3.815,70,10,70"/>
+        <TextBox Grid.Row="0" Grid.Column="2" x:Name="txtFieldName" Text="{Binding FieldName}" IsReadOnly="{Binding IsFieldNameReadonly}" Height="20" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" Margin="10,15,19.667,15"/>
+        <ComboBox Grid.Row="1" Grid.Column="2" x:Name="cbFieldType" FontWeight="Bold" Height="22" FontSize="12" MaxDropDownHeight="200" Margin="10,14,19.667,14" BorderBrush="{StaticResource CommonBorder}" VerticalContentAlignment="Center">
             <ComboBoxItem Height="20" Content="string" Tag="string" IsSelected="True" Margin="0,1,0,1"/>
             <ComboBoxItem Height="20" Content="int" Tag="int" Margin="0,1,0,1"/>
             <ComboBoxItem Height="20" Content="double" Tag="double" Margin="0,1,0,1"/>
         </ComboBox>
-        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FieldDesc}" FontSize="10" Margin="10,20,20,20" TextWrapping="Wrap"/>
-        <Grid Grid.Row="3" Grid.ColumnSpan="2" Background="#40000000">
-            <el:ButtonDark Content="确定保存" Width="120" Height="30" Margin="0,0,10,0"
+        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding FieldDesc}" FontSize="10" Margin="10,20,19.667,20" TextWrapping="Wrap"/>
+        <Grid Grid.Row="3" Grid.ColumnSpan="3" Background="#40000000" Margin="0,0,-0.333,0">
+            <el:ButtonDark Content="确定保存" Width="120" Height="30" Margin="0,10,22,10"
                            HorizontalAlignment="Right" VerticalAlignment="Center" 
                            FontWeight="Bold" FontSize="16" Click="btnSave_Clicked"/>
         </Grid>

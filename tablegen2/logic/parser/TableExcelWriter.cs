@@ -19,8 +19,7 @@ namespace tablegen2.logic
                 throw new Exception(string.Format("无法识别的文件扩展名 {0}", ext));
 
             var workbook = ext == ".xls" ? (IWorkbook)new HSSFWorkbook() : (IWorkbook)new XSSFWorkbook();
-            var sheet1 = workbook.CreateSheet(AppData.Config.SheetNameForField);
-            var sheet2 = workbook.CreateSheet(AppData.Config.SheetNameForData);
+            var sheet = workbook.CreateSheet(AppData.Config.SheetNameForData);
 
             //创建新字体
             var font = workbook.CreateFont();
@@ -38,10 +37,42 @@ namespace tablegen2.logic
                 workbook.GetCellStyleAt(i).VerticalAlignment = VerticalAlignment.Center;
             }
 
-            _writeToDefSheet(sheet1, data.Headers);
-            _writeToDataSheet(sheet2, data);
+            try
+            {
+                IRow row0 = sheet.GetRow(0);
+                IRow row1 = sheet.GetRow(1);
+                IRow row2 = sheet.GetRow(2);
+                if (row0 == null)
+                    row0 = sheet.CreateRow(0);
+                if (row1 == null)
+                    row1 = sheet.CreateRow(1);
+                if (row2 == null)
+                    row2 = sheet.CreateRow(2);
 
-            var tmppath = Path.Combine(Path.GetDirectoryName(filePath), 
+                row0.Height = 50;
+
+                for (int i = 0; i < data.Headers.Count; i++)
+                {
+                    var cell0 = row0.GetCell(i);
+                    var cell1 = row1.GetCell(i);
+                    var cell2 = row2.GetCell(i);
+                    if (cell0 == null)
+                        cell0 = row0.CreateCell(i);
+                    if (cell1 == null)
+                        cell1 = row1.CreateCell(i);
+                    if (cell2 == null)
+                        cell2 = row2.CreateCell(i);
+
+                    cell0.SetCellValue(data.Headers[i].FieldDesc);
+                    cell1.SetCellValue(data.Headers[i].FieldType);
+                    cell2.SetCellValue(data.Headers[i].FieldName);
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception(string.Format("{0} 表创建失败！", filePath));
+            }
+            var tmppath = Path.Combine(Path.GetDirectoryName(filePath),
                 string.Format("{0}.tmp{1}", Path.GetFileNameWithoutExtension(filePath), ext));
             using (var fs = File.Open(tmppath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
             {
@@ -50,83 +81,6 @@ namespace tablegen2.logic
             var content = File.ReadAllBytes(tmppath);
             File.Delete(tmppath);
             File.WriteAllBytes(filePath, content);
-        }
-
-        private static void _writeToSheet(ISheet sheet, IEnumerable<string> lst)
-        {
-            IRow row;
-            if (sheet.GetRow(0) == null)
-                row = sheet.CreateRow(0);
-            else
-                row = sheet.CreateRow(sheet.LastRowNum + 1);
-
-            int idx = 0;
-            foreach (var s in lst)
-            {
-                var cell = row.CreateCell(idx);
-                double val;
-                if (double.TryParse(s, out val))
-                    cell.SetCellValue(val);
-                else
-                    cell.SetCellValue(s);
-                int curwidth = sheet.GetColumnWidth(idx);
-                sheet.SetColumnWidth(idx, Math.Max(curwidth, _calcSheetWidth(s)));
-
-                if (row.RowNum == 0)
-                {
-                    cell.CellStyle = sheet.Workbook.GetCellStyleAt((short)(sheet.Workbook.NumCellStyles - 1));
-                }
-
-                row.Height = 24 * 15;
-
-                idx++;
-            }
-        }
-
-        private static int _calcSheetWidth(string str)
-        {
-            var r = 0;
-            if (str.Length > 50)
-                str = str.Substring(0, 50);
-            foreach (var c in str)
-            {
-                if ((int)c < 128)
-                    r += 256;
-                else
-                    r += 512;
-            }
-            return Math.Max(2048, r + 1024);
-        }
-
-        private static void _writeToDefSheet(ISheet sheet, List<TableExcelHeader> headers)
-        {
-            _writeToSheet(sheet, new string[]
-            {
-                "字段名称",
-                "字段类型",
-                "字段说明",
-            });
-
-            foreach (var hdr in headers)
-            {
-                _writeToSheet(sheet, new string[]
-                {
-                    hdr.FieldName,
-                    hdr.FieldType,
-                    hdr.FieldDesc,
-                });
-            }
-        }
-
-        private static void _writeToDataSheet(ISheet sheet, TableExcelData data)
-        {
-            var lst = data.Headers.Select(a => a.FieldName).ToList();
-            _writeToSheet(sheet, lst);
-
-            foreach (var row in data.Rows)
-            {
-                _writeToSheet(sheet, row.StrList);
-            }
         }
     }
 }

@@ -11,7 +11,9 @@
         Icon="/tablegen2;component/app.ico"
         ResizeMode="NoResize" ShowInTaskbar="False"
         PreviewKeyDown="Window_PreviewKeyDown">
-    <Grid x:Name="gridContainer" Background="LightGray">
-        
+    <Grid x:Name="gridContainer" Background="LightGray" Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>
+
     </Grid>
 </Window>

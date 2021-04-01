@@ -109,5 +109,10 @@ namespace tablegen2.layouts
             if (MoreSettingEvent != null)
                 MoreSettingEvent.Invoke();
         }
+
+        private void CbExportFormat_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }
